@@ -19,17 +19,17 @@ class RegistrationValidator {
     public function validateRegistrationForm() {
 
         $validator = new Validator($this->data);
-        $validator->setRule('email','required');
-        $validator->setRule('email','email');
-        $validator->setRule('password','required');
-        $validator->setRule('password','min:8');
-        $validator->setRule('password2','required');
-        $validator->setRule('password2','min:8');
-        $validator->setRule('password2','confirm:password');
+        $validator->setRule('email','required','email');
+        $validator->setRule('email','email','email_format');
+        $validator->setRule('password','required','password');
+        $validator->setRule('password','min:8','password');
+        $validator->setRule('password2','required','password2');
+        $validator->setRule('password2','min:8','password2');
+        $validator->setRule('password2','confirm:password','password_mismatch');
         $validator->validateForm();
 
         $errors = $validator->getErrors();
 
-        if (!empty($errors)) ApiResponse::displayError($errors[0]);
+        if (!empty($errors)) ApiResponse::displayError($errors[0]['message']);
     }
 }

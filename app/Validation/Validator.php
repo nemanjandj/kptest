@@ -18,23 +18,21 @@ class Validator implements ValidatorInterface {
     }
 
     // Add Validation Rule For Specific Key
-    public function setRule($key,$rule){
-        if (array_key_exists($key, $this->rules)) {
-            if (!in_array($rule, $this->rules[$key])) {
-                $this->rules[$key][]=$rule;
-            }
-        } else {
-            $this->rules[$key][] = $rule;
-        }
+    public function setRule($key,$rule,$msg){
+        $ruleExists = $this->ruleExistForKey($key,$rule);
+        if (!$ruleExists) 
+            $this->rules[$key][]=['rule' => $rule, 'msg' => $msg];
     }
 
     // Validate Form
     public function validateForm(){
-        foreach ($this->data as $key => $value) {
-            if (array_key_exists($key,$this->rules)) {
-                $valRules=$this->rules[$key];
-                foreach ($valRules as $rule) {
-                    $this->validateField($rule,$key);
+        if (is_array($this->data)) {
+            foreach ($this->data as $key => $value) {
+                if (array_key_exists($key,$this->rules)) {
+                    $valRules=$this->rules[$key];
+                    foreach ($valRules as $rule) {
+                        $this->validateField($rule,$key);
+                    }
                 }
             }
         }
@@ -48,43 +46,53 @@ class Validator implements ValidatorInterface {
 
     // Validate input field with selected rule
     public function validateField($rule,$key) {
-        if (strpos($rule,':') !== false) {
-            $rules = explode(':',$rule);
+        if (strpos($rule['rule'],':') !== false) {
+            $rules = explode(':',$rule['rule']);
             $ruleType = $rules[0];
             $ruleVal = $rules[1];
         } else {
-            $ruleType = $rule;
+            $ruleType = $rule['rule'];
         }
+        $msg=$rule['msg'];
 
 
         switch ($ruleType) {
+            case 'required':
+                $data = $this->data[$key]; break;
             case 'email':
-                $data = $this->data[$key];
-                $error = 'email_format';
-                break;
+                $data = $this->data[$key]; break;
             case 'min':
-                $data = ['value' => $this->data[$key], 'min' => $ruleVal];
-                $error = $key;
-                break;
+                $data = ['value' => $this->data[$key], 'min' => $ruleVal]; break;
             case 'confirm':
-                $data = ['value' => $this->data[$key], 'confirm' => $this->data[$ruleVal]];
-                $error = $ruleVal.'_mismatch';
-                break;
+                $data = ['value' => $this->data[$key], 'confirm' => $this->data[$ruleVal]]; break;
             default: 
-                $data = $this->data[$key];
-                $error = $key;
-                break;
+                $data = $this->data[$key]; break;
         }
 
         $rule = new Rule();
         $className = __NAMESPACE__.'\\'.ucfirst($ruleType).'Rule';
-        $rule = $rule->create($className, $data);
-        $rule->isValid($data) ? true : $this->addError($error);
+        $rule = $rule->create($className);
+        $rule->isValid($data) ? true : $this->addError($key,$msg);
     }
 
     // Add validation error to the array
-    public function addError($error){
-        $this->errors[]=$error;
+    public function addError($key,$error){
+        $this->errors[]=['name' => $key, 'message' => $error];
+    }
+
+    // Get array of rules for the key
+    public function getRules($key) {
+        return (array_key_exists($key, $this->rules)) ? $this->rules[$key] : [];
+    }
+
+    public function ruleExistForKey($key,$rule) {
+        $keyRules = $this->getRules($key);
+        foreach ($keyRules as $keyRule) {
+            if ($keyRule['rule'] == $rule) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

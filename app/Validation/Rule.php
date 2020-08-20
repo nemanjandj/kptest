@@ -1,6 +1,7 @@
 <?php 
 
 namespace KpTest\Validation;
+use KpTest\Exceptions\RuleNotDefinedException;
 
 /**
  * Rule class
@@ -8,11 +9,13 @@ namespace KpTest\Validation;
  */
 class Rule {
 
-
     // Validate
-    public function create($class,$value){
-
-        return new $class();
+    public function create($class){
+    	if (class_exists($class)) {
+    		return new $class();
+    	} else {
+    		throw new RuleNotDefinedException();
+    	}
         
     }
 

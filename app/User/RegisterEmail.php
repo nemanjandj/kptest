@@ -17,7 +17,7 @@ class RegisterEmail extends Email implements Observer {
 	// Send registration email
     public function  onUserRegistered($observable, $data) 
     {
-        // $this->send($data['email'],$this->subject,$this->message,$this->from);
+        $this->send($data['email'],$this->subject,$this->message,$this->from);
     }
 }
  
