@@ -76,7 +76,7 @@ class ValidatorTest extends TestCase
 	// Test Email Format Rule by passing values that fit and doesn't fit email format
 	public function testEmailFormatRule() {
 
-		$rule = 'required';
+		$rule = 'email';
 
 		$key1 = 'email1'; 
 		$value1 = 'nemanjandj@gmail.com';
@@ -111,7 +111,7 @@ class ValidatorTest extends TestCase
 	// Test Minimum Rule by passing values smaller and bigger than minimum value
 	public function testMinimumRule() {
 
-		$rule = 'min:7';
+		$rule = 'min=7';
 
 		$key1 = 'first_name'; 
 		$value1 = 'Nemanja';

@@ -46,28 +46,21 @@ class Validator implements ValidatorInterface {
 
     // Validate input field with selected rule
     public function validateField($rule,$key) {
-        if (strpos($rule['rule'],':') !== false) {
+        if (strpos($rule['rule'],'=') !== false) {
+            $rules = explode('=',$rule['rule']);
+            $ruleType = $rules[0];
+            $ruleVal = $rules[1];
+            $data = ['value' => $this->data[$key], 'min' => $ruleVal];
+        } elseif (strpos($rule['rule'],':') !== false) {
             $rules = explode(':',$rule['rule']);
             $ruleType = $rules[0];
             $ruleVal = $rules[1];
+            $data = ['value' => $this->data[$key], 'confirm' => $this->data[$ruleVal]];
         } else {
             $ruleType = $rule['rule'];
+            $data = $this->data[$key];
         }
         $msg=$rule['msg'];
-
-
-        switch ($ruleType) {
-            case 'required':
-                $data = $this->data[$key]; break;
-            case 'email':
-                $data = $this->data[$key]; break;
-            case 'min':
-                $data = ['value' => $this->data[$key], 'min' => $ruleVal]; break;
-            case 'confirm':
-                $data = ['value' => $this->data[$key], 'confirm' => $this->data[$ruleVal]]; break;
-            default: 
-                $data = $this->data[$key]; break;
-        }
 
         $rule = new Rule();
         $className = __NAMESPACE__.'\\'.ucfirst($ruleType).'Rule';

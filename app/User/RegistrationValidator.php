@@ -22,9 +22,9 @@ class RegistrationValidator {
         $validator->setRule('email','required','email');
         $validator->setRule('email','email','email_format');
         $validator->setRule('password','required','password');
-        $validator->setRule('password','min:8','password');
+        $validator->setRule('password','min=8','password');
         $validator->setRule('password2','required','password2');
-        $validator->setRule('password2','min:8','password2');
+        $validator->setRule('password2','min=8','password2');
         $validator->setRule('password2','confirm:password','password_mismatch');
         $validator->validateForm();
 
