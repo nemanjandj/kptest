@@ -6,7 +6,7 @@ use KpTest\Interfaces\RuleInterface;
 
 /**
  * MinRule class
- * Element must have value greater thant minumum
+ * Value length must be bigger or equal than minumum
  */
 class MinRule implements RuleInterface {
 

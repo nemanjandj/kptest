@@ -3,7 +3,7 @@
 namespace KpTest\Exceptions;
 
 /**
- * RuleNotDefinedException class
+ * RuleNotDefinedException class for validation rules that are not defined
  */
 class RuleNotDefinedException extends \Exception
 {
@@ -15,6 +15,7 @@ class RuleNotDefinedException extends \Exception
     public function __construct() {
 
         parent::__construct($this->message, $this->code, $this->previous);
+
     }
 
 }

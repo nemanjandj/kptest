@@ -6,7 +6,7 @@ use KpTest\Interfaces\RuleInterface;
 
 /**
  * ConfirmRule class
- * Elements' values must match
+ * Values must match
  */
 class ConfirmRule implements RuleInterface {
 

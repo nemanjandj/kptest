@@ -6,7 +6,7 @@ use KpTest\Interfaces\RuleInterface;
 
 /**
  * RequiredRule class
- * Element can not be empty
+ * Value can not be empty
  */
 class RequiredRule implements RuleInterface {
 

@@ -6,7 +6,7 @@ use KpTest\Interfaces\RuleInterface;
 
 /**
  * EmailRule class
- * Element must have valid email format
+ * Value must have valid email format
  */
 class EmailRule implements RuleInterface {
 
