@@ -79,11 +79,11 @@ class ValidatorTest extends TestCase
 		$rule = 'email';
 
 		$key1 = 'email1'; 
-		$value1 = 'nemanjandj@gmail.com';
+		$value1 = 'nemanjandj@gmail.com'; // valid email format
 		$msg1 = 'Email Must Be Valid Format';
 
 		$key2 = 'email2';
-		$value2 = '';
+		$value2 = 'Nemanja'; // invalid email format
 		$msg2 = 'Email Must Be Valid Format';
 
 		$this->request = [
@@ -108,17 +108,17 @@ class ValidatorTest extends TestCase
 
 
 
-	// Test Minimum Rule by passing values smaller and bigger than minimum value
+	// Test Minimum Rule by passing values smaller and bigger (or equal) than minimum value
 	public function testMinimumRule() {
 
 		$rule = 'min=7';
 
 		$key1 = 'first_name'; 
-		$value1 = 'Nemanja';
+		$value1 = 'Nemanja'; // Valid since length is 7
 		$msg1 = 'First name must have minimum 7 letters';
 
 		$key2 = 'last_name';
-		$value2 = 'Djoric';
+		$value2 = 'Djoric'; // Not valid, length is 6
 		$msg2 = 'Last name must have minimum 7 letters';
 
 		$this->request = [
@@ -153,10 +153,10 @@ class ValidatorTest extends TestCase
 		$value1 = 'nemanja123';
 
 		$key2 = 'password2';
-		$value2 = 'nemanja123';
+		$value2 = 'nemanja123'; // password is the same
 		
 		$key3 = 'password3';
-		$value3 = 'nemanja123456';
+		$value3 = 'nemanja123456'; // password different
 		
 		$msg = 'Password Must Be Confirmed';
 

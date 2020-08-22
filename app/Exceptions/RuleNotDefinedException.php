@@ -2,7 +2,9 @@
 
 namespace KpTest\Exceptions;
 
-
+/**
+ * RuleNotDefinedException class
+ */
 class RuleNotDefinedException extends \Exception
 {
 

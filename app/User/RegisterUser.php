@@ -39,7 +39,7 @@ class RegisterUser implements Subject {
 
         // Create User in Database
         $email = trim($data['email']);
-        $password = trim($data['password']);
+        $password = $data['password'];
         $query = "INSERT INTO user (email, password) VALUES (?, ?)";
         $userId = $db->insertRow($query,[$email, $password]);
 
