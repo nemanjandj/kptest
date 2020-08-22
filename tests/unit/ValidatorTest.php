@@ -63,10 +63,10 @@ class ValidatorTest extends TestCase
 
 		$errors = $validator->getErrors();
 
-		$this->assertFalse(in_array(['name' => $key1, 'message' => $msg1], $errors)); 
+		$this->assertNotContains(['name' => $key1, 'message' => $msg1], $errors);
 		// first_name has value 'Nemanja' and is not in the errors list
 
-		$this->assertTrue(in_array(['name' => $key2, 'message' => $msg2], $errors)); 
+		$this->assertContains(['name' => $key2, 'message' => $msg2], $errors);
 		// last_name has empty value and it should in the errors list
 
 	}
@@ -98,10 +98,10 @@ class ValidatorTest extends TestCase
 
 		$errors = $validator->getErrors();
 		
-		$this->assertFalse(in_array(['name' => $key1, 'message' => $msg1], $errors)); 
+		$this->assertNotContains(['name' => $key1, 'message' => $msg1], $errors); 
 		// First email should not be in the errors array because it has valid email format
 
-		$this->assertTrue(in_array(['name' => $key2, 'message' => $msg2], $errors)); 
+		$this->assertContains(['name' => $key2, 'message' => $msg2], $errors); 
 		// Second email is not valid email format, so it should appear in the errors array
 
 	}
@@ -133,10 +133,10 @@ class ValidatorTest extends TestCase
 
 		$errors = $validator->getErrors();
 
-		$this->assertFalse(in_array(['name' => $key1, 'message' => $msg1], $errors)); 
+		$this->assertNotContains(['name' => $key1, 'message' => $msg1], $errors); 
 		// first_name has length greater than 7 and is not in the errors list
 
-		$this->assertTrue(in_array(['name' => $key2, 'message' => $msg2], $errors)); 
+		$this->assertContains(['name' => $key2, 'message' => $msg2], $errors); 
 		// last_name has length smaller than 7 and it should be in the errors list
 	}
 
@@ -173,11 +173,63 @@ class ValidatorTest extends TestCase
 
 		$errors = $validator->getErrors();
 
-		$this->assertFalse(in_array(['name' => $key2, 'message' => $msg], $errors)); 
+		$this->assertNotContains(['name' => $key2, 'message' => $msg], $errors); 
 		// error is not in the array since values are equal
 
- 		$this->assertTrue(in_array(['name' => $key3, 'message' => $msg], $errors)); 
+ 		$this->assertContains(['name' => $key3, 'message' => $msg], $errors); 
  		// error is in the array since values are not equal
+
+	}
+
+
+
+
+	// Test if errors array empty if valdation passes
+	public function testValidationPasses() {
+
+		//required
+		$rule1 = 'required';
+		$key1 = 'first_name'; 
+		$value1 = 'Nemanja'; // Not empty
+		$msg1 = 'First Name is Required';
+
+		// Email
+		$rule2 = 'email';
+		$key2 = 'email1'; 
+		$value2 = 'nemanjandj@gmail.com'; // valid email format
+		$msg2 = 'Email Must Be Valid Format';
+
+		// Minimum
+		$rule3 = 'min=5';
+		$key3 = 'first_name'; 
+		$value3 = 'Nemanja'; // Valid since length is 7
+		$msg3 = 'First name must have minimum 5 letters';
+
+		// Confirm
+
+		$rule4 = 'confirm:first_name';
+		$key4 = 'first_name_confirm'; 
+		$value4 = 'Nemanja'; // Same value as first_name
+		$msg4 = 'First Name is not Confirmed';
+
+		$this->request = [
+			$key1 => $value1,
+			$key2 => $value2,
+			$key3 => $value3,
+			$key4 => $value4
+		];
+
+		$validator = new Validator($this->request);
+		$validator->setRule($key1, $rule1, $msg1);
+		$validator->setRule($key2, $rule2, $msg2);
+		$validator->setRule($key3, $rule3, $msg3);
+		$validator->setRule($key4, $rule4, $msg4);
+		$validator->validateForm();
+
+
+		$errors = $validator->getErrors();
+		$this->assertEmpty($errors);
+		// All validation methods passess and errors array is empty
 
 	}
 
@@ -204,6 +256,8 @@ class ValidatorTest extends TestCase
 		$errors = $validator->getErrors();
 
 	}
+
+
 
 
 
